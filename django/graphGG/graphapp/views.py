@@ -13,7 +13,10 @@ def form_name_view(request):
         form = forms.FormName(request.POST)
 
         if form.is_valid():
+            form.save(commit=True)
+            return index(request)
             print("validated")
-
+        else:
+            print("FORM IS INVALID")
     return render(request, "graphapp/form_page.html", {"form": form})
 

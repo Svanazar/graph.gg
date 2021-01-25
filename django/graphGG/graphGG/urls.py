@@ -15,11 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls import include
 from graphapp import views
 from django.conf.urls import url
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     url(r"^$", views.index, name="index"),
-    url(r"^formpage/", views.form_name_view, name="form_name"),
+    url(r"^formpage/", include("graphapp.urls")),
 ]
