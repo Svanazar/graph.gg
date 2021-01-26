@@ -11,7 +11,7 @@ class Person(StructuredNode):
     name = StringProperty(unique_index=True)
     friends = RelationshipTo('Person', 'KNOWS')
 
-URL='https://en.wikipedia.org/wiki/Saurav_Ganguly'
+URL='https://en.wikipedia.org/wiki/Sachin_Tendulkar'
 page=requests.get(URL)
 
 soup=BeautifulSoup(page.content, 'html.parser')
@@ -20,9 +20,14 @@ dict1= soup.find_all("table", class_="infobox")
 s=dict1[0].get_text()
     #print(s)
 index=s.find("Born")
+NAME = 'Sachin Tendulkar'
+curr = ""
 if (index>0):
     print("PERSON")
-    curr=Person(name='Saurav Ganguly').save()
+    try:
+        curr=Person(name=NAME).save()
+    except:
+        curr = Person.nodes.get(name=NAME)
     #curr = Person.get_or_create(name='Saurav Ganguly').save()
 else:
     print("NOT PERSON")
@@ -54,12 +59,24 @@ for link in tqdm(url_dict):
     if (index>0):
         print(link.get('title'))
         print("PERSON")
+        text_dict=soup2.findAll('p')
+        c=0
+        for para in text_dict:
+            ss= para.get_text()
+            sss=ss.split(" ")
+            c+=len(sss)
+        print(c)
+        if(c < 2500):
+            continue
+        now=Person(name=link.get('title'))
         try:
-            now=Person(name=link.get('title')).save() 
-            rel = curr.friends.connect(now)
+            now.save() 
             print(f'Saved {link.get("title")}')
         except:
+            now = Person.nodes.get(name=link.get('title'))
             print(f'Not saved {link.get("title")}', sys.exc_info()[0])
+        finally:
+            curr.friends.connect(now)
 
 print('Done')
         #final_dict[curr_person]=str(link.get('title'))
