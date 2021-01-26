@@ -1,9 +1,11 @@
 import requests
+import sys
+from tqdm import tqdm
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from neomodel import StructuredNode, StringProperty, RelationshipTo, RelationshipFrom, config
 
-config.DATABASE_URL = 'bolt://neo4j:atharva@localhost:7687'
+config.DATABASE_URL = 'bolt://neo4j:lekhchitra@localhost:7687'
 
 class Person(StructuredNode):
     name = StringProperty(unique_index=False)
@@ -30,7 +32,7 @@ url_dict = soup.select('p a[href]')
 ct=0
 final_dict={}
 
-for link in url_dict:
+for link in tqdm(url_dict):
     url2='https://en.wikipedia.org/' + str(link.get('href'))
 
     ss=str(link.get('title'))
@@ -52,10 +54,14 @@ for link in url_dict:
     if (index>0):
         print(link.get('title'))
         print("PERSON")
-     
-        now=Person(name=link.get('title')).save() 
-        rel = curr.friends.connect(now)
+        try:
+            now=Person(name=link.get('title')).save() 
+            rel = curr.friends.connect(now)
+            print(f'Saved {link.get("title")}')
+        except:
+            print(f'Not saved {link.get("title")}', sys.exc_info()[0])
 
+print('Done')
         #final_dict[curr_person]=str(link.get('title'))
         
     
