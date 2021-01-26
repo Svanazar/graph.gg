@@ -8,7 +8,7 @@ from neomodel import StructuredNode, StringProperty, RelationshipTo, Relationshi
 config.DATABASE_URL = 'bolt://neo4j:lekhchitra@localhost:7687'
 
 class Person(StructuredNode):
-    name = StringProperty(unique_index=False)
+    name = StringProperty(unique_index=True)
     friends = RelationshipTo('Person', 'KNOWS')
 
 URL='https://en.wikipedia.org/wiki/Saurav_Ganguly'
