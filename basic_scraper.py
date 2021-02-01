@@ -11,21 +11,22 @@ from bs4 import BeautifulSoup
 from neomodel import (
     StructuredNode,
     StringProperty,
+    BooleanProperty,
     RelationshipTo,
     RelationshipFrom,
     config,
 )
 
 
-config.DATABASE_URL = "bolt://neo4j:pass@localhost:7687"
+config.DATABASE_URL = "bolt://neo4j:lekhchitra@localhost:7687"
 
 
 class Person(StructuredNode):
     name = StringProperty(unique_index=True)
     friends = RelationshipTo("Person", "KNOWS")
+    politician = BooleanProperty()
 
-
-NAME = "Virender Sehwag"
+NAME = "L. K. Advani"
 q.put(NAME)
 cnt = 0
 while cnt < 50:
@@ -87,7 +88,28 @@ while cnt < 50:
             print(c)
             if c < 2500:
                 continue
+            first_para=text_dict[1].get_text()
+            first_para_dict=first_para.split(".")
+            line=first_para_dict[0]
+            line = soup2.select("table~p")[0].getText()
+            line = line.split(".")[0]
+            print(f'line is {line}')
+            index1=line.find("Indian")
+            if index1<0 :
+                print("NOT INDIAN")
+                continue
+
             now = Person(name=link.get("title"))
+
+            index2=line.find("cricket")
+            if index2>0:
+                print("Cricketer")
+            index3=line.find("politician")
+            if index3>0:
+                print("Politician")
+                now.politician = True
+            else:
+                now.politician = False
             try:
                 now.save()
                 print(f'Saved {link.get("title")}')
