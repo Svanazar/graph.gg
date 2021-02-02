@@ -33,20 +33,22 @@ occupation_filters = {
     "cricketer": ['cricket'],
 }
 
-NAME = "L. K. Advani"
-q.put(NAME)
-cnt = 0
-while cnt < 50:
-    NAME = q.get()
-    tqdm.write(f'SOURCE: {NAME}')
-    curr = None
-    cnt += 1
-    try:
-        curr = Person(name=NAME).save()
-    except:
-        curr = Person.nodes.get(name=NAME)
+MAX_ADDITION_SOURCES = 1
+additionSourceCount = 0
+source = "L. K. Advani"
+q.put(source)
 
-    URL = "https://en.wikipedia.org/wiki/" + NAME.replace(" ", "_")
+while not q.empty():
+    source = q.get()
+    tqdm.write(f'SOURCE: {source}')
+    curr = None
+    additionSourceCount += 1
+    try:
+        curr = Person(name=source).save()
+    except:
+        curr = Person.nodes.get(name=source)
+
+    URL = "https://en.wikipedia.org/wiki/" + source.replace(" ", "_")
     page = requests.get(URL)
     soup = BeautifulSoup(page.content, "html.parser")
     url_dict = soup.select("p a[href]")
@@ -58,12 +60,19 @@ while cnt < 50:
         if len(x) > 3:
             continue
         person_name = link.get("title")
+        
+        if person_name == source:
+            continue
 
-        #Check if node already exists        
+        # Check if node already exists        
         person_node = Person.nodes.get_or_none(name=person_name)
         if person_node is not None:
             tqdm.write(f'{person_name} EXISTS')
             curr.friends.connect(person_node)
+            continue
+
+        # Check if maximum limit on addition sources is crossed
+        if additionSourceCount > MAX_ADDITION_SOURCES:
             continue
 
         page2 = requests.get(url2)
