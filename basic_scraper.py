@@ -25,10 +25,11 @@ class Person(StructuredNode):
     name = StringProperty(unique_index=True)
     friends = RelationshipTo("Person", "KNOWS")
     politician = BooleanProperty()
+    cricketer = BooleanProperty()
 
 # stores occupation and corresponding keywords
 occupation_filters = {
-    "politician": ['politician'],
+    "politician": ['politician', 'statesman'],
     "cricketer": ['cricket'],
 }
 
@@ -48,11 +49,11 @@ while cnt < 50:
     if index > 0:
         print("PERSON")
         cnt += 1
-        # try:
-        #     curr = Person(name=NAME).save()
-        #     cnt = cnt + 1
-        # except:
-        #     curr = Person.nodes.get(name=NAME)
+        try:
+            curr = Person(name=NAME).save()
+            cnt = cnt + 1
+        except:
+            curr = Person.nodes.get(name=NAME)
     else:
         print("NOT PERSON")
 
@@ -67,7 +68,15 @@ while cnt < 50:
         x = ss.split(" ")
         if len(x) > 3:
             continue
-        
+
+        #Check if node already exists
+        person_name = link.get("title")
+        person_node = Person.nodes.get_or_none(name=person_name)
+        if person_node is not None:
+            tqdm.write(f'{person_name} EXISTS')
+            curr.friends.connect(person_node)
+            continue
+
         page2 = requests.get(url2)
         soup2 = BeautifulSoup(page2.content, "html.parser")
 
@@ -81,7 +90,7 @@ while cnt < 50:
             continue
         tqdm.write("")
         tqdm.write(link.get("title"))
-        tqdm.write("Found Born")
+        tqdm.write("FOUND Born")
 
         #Text length check
         text_dict = soup2.select(".mw-parser-output > p")
@@ -101,7 +110,6 @@ while cnt < 50:
             if len(first_para) > 0:
                 break
 
-        # line = first_para.split('.')[0]
         line = first_para.split('\n')[0]
         tqdm.write(f'Line is : {line}')
 
@@ -118,23 +126,16 @@ while cnt < 50:
             setattr(now, occupation, False)
             for keyword in keywords:
                 if(line.find(keyword) > 0):
-                    tqdm.write(occupation)
+                    tqdm.write(f'OCCUPATION: {occupation}')
                     setattr(now, occupation, True)
                     break
 
-        q.put(link.get("title"))
-        
-        # Saving into database
-        # try:
-        #     now.save()
-        #     print(f'Saved {link.get("title")}')
-            # q.put(link.get("title"))
-        # except:
-        #     now = Person.nodes.get(name=link.get("title"))
-        #     print(f'Not saved {link.get("title")}', sys.exc_info()[0])
-        # finally:
-        #     curr.friends.connect(now)
+        #Saving into database
+        now.save()
+        tqdm.write(f'SAVED {person_name}')
+        curr.friends.connect(now)
 
-    print("Done")
-    # final_dict[curr_person]=str(link.get('title'))
+        q.put(person_name)
+
+print("Done")
 
