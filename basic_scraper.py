@@ -38,29 +38,18 @@ q.put(NAME)
 cnt = 0
 while cnt < 50:
     NAME = q.get()
+    tqdm.write(f'SOURCE: {NAME}')
+    curr = None
+    cnt += 1
+    try:
+        curr = Person(name=NAME).save()
+    except:
+        curr = Person.nodes.get(name=NAME)
+
     URL = "https://en.wikipedia.org/wiki/" + NAME.replace(" ", "_")
     page = requests.get(URL)
-
     soup = BeautifulSoup(page.content, "html.parser")
-    dict1 = soup.find_all("table", class_="infobox")
-    s = dict1[0].get_text()
-    index = s.find("Born")
-    curr = ""
-    if index > 0:
-        print("PERSON")
-        cnt += 1
-        try:
-            curr = Person(name=NAME).save()
-            cnt = cnt + 1
-        except:
-            curr = Person.nodes.get(name=NAME)
-    else:
-        print("NOT PERSON")
-
     url_dict = soup.select("p a[href]")
-
-    ct = 0
-    final_dict = {}
 
     for link in tqdm(url_dict):
         url2 = "https://en.wikipedia.org/" + str(link.get("href"))
@@ -68,9 +57,9 @@ while cnt < 50:
         x = ss.split(" ")
         if len(x) > 3:
             continue
-
-        #Check if node already exists
         person_name = link.get("title")
+
+        #Check if node already exists        
         person_node = Person.nodes.get_or_none(name=person_name)
         if person_node is not None:
             tqdm.write(f'{person_name} EXISTS')
@@ -88,8 +77,7 @@ while cnt < 50:
         index = s.find("Born")
         if index < 0:
             continue
-        tqdm.write("")
-        tqdm.write(link.get("title"))
+        tqdm.write(f'\n{person_name}')
         tqdm.write("FOUND Born")
 
         #Text length check
@@ -103,7 +91,6 @@ while cnt < 50:
             continue
         tqdm.write(f'Text length is {c}')
 
-        #Find the first paragraph of content
         first_para = ''
         for el in text_dict:
             first_para = el.getText(strip=True)
