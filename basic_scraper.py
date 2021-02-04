@@ -38,6 +38,9 @@ additionSourceCount = 0
 source = "L. K. Advani"
 q.put(source)
 
+# requests session object which allows reusing connections
+reqSession = requests.Session()
+
 while not q.empty():
     source = q.get()
     tqdm.write(f'SOURCE: {source}')
@@ -49,7 +52,7 @@ while not q.empty():
         curr = Person.nodes.get(name=source)
 
     URL = "https://en.wikipedia.org/wiki/" + source.replace(" ", "_")
-    page = requests.get(URL)
+    page = reqSession.get(URL)
     soup = BeautifulSoup(page.content, "html.parser")
     url_dict = soup.select("p a[href]")
 
@@ -75,7 +78,7 @@ while not q.empty():
         if additionSourceCount > MAX_ADDITION_SOURCES:
             continue
 
-        page2 = requests.get(url2)
+        page2 = reqSession.get(url2)
         soup2 = BeautifulSoup(page2.content, "html.parser")
 
         #Born check
