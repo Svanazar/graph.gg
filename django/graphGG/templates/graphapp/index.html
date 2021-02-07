@@ -13,7 +13,12 @@
 <body>
 
   <div class="container">
-    <h1>Hello</h1>
+    <h1>Nodes</h1>
+    {% for node in nodes %}
+    <p>
+    <h1>{{ node.name1 }} ==> {{ node.name2 }}</h1>
+    </p>
+    {% endfor %}
   </div>
 </body>
 
