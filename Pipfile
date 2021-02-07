@@ -1,0 +1,37 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+asgiref = "==3.3.1"
+attrs = "==20.3.0"
+beautifulsoup4 = "==4.9.3"
+certifi = "==2020.12.5"
+chardet = "==4.0.0"
+idna = "==2.10"
+iniconfig = "==1.1.1"
+neo4j-driver = "==4.1.1"
+neobolt = "==1.7.17"
+neomodel = "==4.0.2"
+pluggy = "==0.13.1"
+py = "==1.10.0"
+pyparsing = "==2.4.7"
+pytest = "==6.2.2"
+pytz = "==2020.5"
+requests = "==2.25.1"
+soupsieve = "==2.1"
+sqlparse = "==0.4.1"
+toml = "==0.10.2"
+tqdm = "==4.56.0"
+urllib3 = "==1.26.2"
+Django = "==3.1.5"
+Shapely = "==1.7.1"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
+
+[scripts]
+scraper = "python3 basic_scraper.py"
