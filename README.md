@@ -1,3 +1,3 @@
 # graph.gg
 #new
-#heya
+#new too
