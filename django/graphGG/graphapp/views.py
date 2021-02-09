@@ -100,7 +100,7 @@ def reco(request):
     form = forms.SingleQueryForm()
 
     if request.method == "POST":
-        form = forms.SingleQueryForm(request.POST)
+        form = forms.FormName(request.POST)
 
         if form.is_valid():
             form.save(commit=True)
