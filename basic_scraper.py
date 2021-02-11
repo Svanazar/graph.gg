@@ -19,7 +19,7 @@ from neomodel import (
     config,
 )
 
-config.DATABASE_URL = "bolt://neo4j:lekhchitra@localhost:7687"
+config.DATABASE_URL = "bolt://neo4j:atharva@localhost:7687"
 
 class Person(StructuredNode):
     name = StringProperty(unique_index=True)
@@ -33,7 +33,7 @@ occupation_filters = {
     "cricketer": ['cricket'],
 }
 
-MAX_ADDITION_SOURCES = 5
+MAX_ADDITION_SOURCES = 10
 additionSourceCount = 0
 
 async def scrape(link, curr, iterred):
@@ -137,7 +137,7 @@ async def scrape(link, curr, iterred):
 async def main():
     global session, additionSourceCount
     session = aiohttp.ClientSession()
-    source = "L. K. Advani"
+    source = "Sachin Tendulkar"
     q.put(source)
     
     # Initialising progressbar
