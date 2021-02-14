@@ -99,9 +99,20 @@ async def scrape(link, source, iterred):
     tqdm.write(f'SAVED {person_name}')
 
     #Get cast
-    url_dict = soup2.select("p a[href]")
-
-    #curr.players.connect(now)
+    castList = soup2.select_one('#Cast').find_next('ul')
+    names = []
+    for el in castList.select('li > a:nth-of-type(1)'):
+        actorName = el['title']
+        if actorName is not None:
+            actorNode = Person.nodes.get_or_none(name=actorName)
+            if actorNode is not None:
+                film.actors.connect(actorNode)
+                actorName += ' CON'
+        names.append(actorName)
+    
+    print(len(names))
+    print('\n'.join(names))
+    print('--')
 
     return person_name
 
