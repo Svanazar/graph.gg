@@ -10,31 +10,11 @@ import sys
 from tqdm import tqdm
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
-from neomodel import (
-    StructuredNode,
-    StringProperty,
-    BooleanProperty,
-    RelationshipTo,
-    RelationshipFrom,
-    config,
-)
+from neomodel import config
 
 config.DATABASE_URL = "bolt://neo4j:pass@localhost:7687"
 
-class Person(StructuredNode):
-    name = StringProperty(unique_index=True)
-    friends = RelationshipTo("Person", "KNOWS")
-    politician = BooleanProperty()
-    cricketer = BooleanProperty()
-    team=BooleanProperty()
-
-class Team(StructuredNode):
-    name = StringProperty(unique_index=True)
-    players = RelationshipFrom("Person", "RELATED TO")
-
-class State(StructuredNode):
-    name = StringProperty(unique_index=True)
-    residents = RelationshipFrom("Person", "FROM")
+from graph_models import Person
 
 # stores occupation and corresponding keywords
 occupation_filters = {

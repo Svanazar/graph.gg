@@ -10,22 +10,11 @@ import sys
 from tqdm import tqdm
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
-from neomodel import (
-    StructuredNode,
-    StringProperty,
-    BooleanProperty,
-    RelationshipTo,
-    RelationshipFrom,
-    config,
-)
+from neomodel import config
 
-config.DATABASE_URL = "bolt://neo4j:pass@localhost:7687"
+from graph_models import Person
 
-class Person(StructuredNode):
-    name = StringProperty(unique_index=True)
-    friends = RelationshipTo("Person", "KNOWS")
-    politician = BooleanProperty()
-    cricketer = BooleanProperty()
+config.DATABASE_URL = "bolt://neo4j:lekhchitra@localhost:7687"
 
 # stores occupation and corresponding keywords
 occupation_filters = {
@@ -34,7 +23,7 @@ occupation_filters = {
     "bollywood":["actor","actress","director","singer","producer"],
 }
 
-MAX_ADDITION_SOURCES = 10
+MAX_ADDITION_SOURCES = 5
 additionSourceCount = 0
 
 async def scrape(link, curr, iterred):
