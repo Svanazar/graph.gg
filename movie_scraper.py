@@ -20,7 +20,7 @@ from neomodel import (
     IntegerProperty
 )
 
-config.DATABASE_URL = "bolt://neo4j:atharva@localhost:7687"
+config.DATABASE_URL = "bolt://neo4j:pass@localhost:7687"
 
 class Person(StructuredNode):
     name = StringProperty(unique_index=True)

@@ -1,0 +1,43 @@
+.ShortestPath {
+
+    margin: auto;
+    width: 50%;
+    align-self: center;
+    text-align: center;
+}
+.ShortestPath ul{
+
+    list-style-type:none ;
+    margin: 0;
+    padding: 0;
+    /* border-top: 1px solid grey; */
+    
+    border: 1px solid grey;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.1),0 2px 4px 2px rgba(0,0,0,0.18);
+    
+}
+
+
+.ShortestPath li{
+    padding :10px 5px;
+    cursor: pointer;
+}
+
+
+.ShortestPath li:hover{
+    font-weight: bold;
+    /* background-color: rgba(87, 253, 57, 0.294); */
+
+}
+
+.thegraph{
+    margin: auto;    
+    margin-top: 2em; 
+    margin-bottom: 10em;
+    align-self: center;
+    width: 50%;
+    height: 90%;
+    border: 2px solid rgb(0, 0, 0);
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.1),0 2px 4px 2px rgba(0,0,0,0.18);
+
+}
