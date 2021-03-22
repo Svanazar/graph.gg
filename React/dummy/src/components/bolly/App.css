@@ -1,0 +1,18 @@
+.App {
+  text-align: center;
+  max-height: 300px;
+}
+.AppComponent{
+  margin : 0 auto 0 auto;
+  width: 600px; 
+} 
+.subb1 button{ /* You Can Name it what you want*/
+  /* background-color: red; */
+  margin-right:16px;
+  margin-top: 14em;
+  margin-bottom: 2em;
+  }
+.subb1 button:last-child{
+  margin-right:0px;
+  /*so the last one dont push the div thas giving the space only between the inputs*/
+}

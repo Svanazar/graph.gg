@@ -24,8 +24,9 @@ export default class AutoCompleteText extends React.Component {
 
         return (
             <div className="ShortestPath">
+
                 <ul>
-                    {this.items.map((item, i) => <li> {item} </li>)}
+                    {this.items.map((item, i) => <li> {`${item[0]} , ${item[1]}`} </li>)}
                 </ul>
             </div >
         )
