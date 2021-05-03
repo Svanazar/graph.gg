@@ -7,8 +7,8 @@ class Person(StructuredNode):
     friends = Relationship("Person", "KNOWS")
     politician = BooleanProperty()
     cricketer = BooleanProperty()
-    actor = BooleanProperty()
-    entertainment = BooleanProperty()
+    bollywood = BooleanProperty()
+    
 
 class Team(StructuredNode):
     name = StringProperty(unique_index=True)
