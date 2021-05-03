@@ -1,9 +1,12 @@
 import React from 'react'
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+
+import Loader from "react-loader-spinner";
+
 import './Autocomplete.css'
 export default class AutoCompleteText extends React.Component {
     constructor(props) {
         super(props);
-        this.handleKeyDown = this.handleKeyDown.bind(this)
         this.cnt = 0
         this.items = null
 
@@ -12,8 +15,10 @@ export default class AutoCompleteText extends React.Component {
             suggestions: [],
             text: '',
             ph: props.ini,
-            cursor: 0
+            cursor: 0,
+            rendered: 0
         };
+
     }
 
 
@@ -36,15 +41,17 @@ export default class AutoCompleteText extends React.Component {
     }
 
     renderSuggestions() {
+
         let { suggestions, cursor } = this.state;
         if (suggestions.length === 0) {
             return null;
         }
         let len = Math.min(suggestions.length, 8);
         suggestions = suggestions.splice(0, len);
+
         return (
             <ul>
-                {suggestions.map((item, i) => <li className={cursor === i ? 'gg' : null} onClick={() => this.suggestionSelected(item)}> {item} </li>)}
+                {suggestions.map((item, i) => <li onClick={() => this.suggestionSelected(item)}> {item} </li>)}
             </ul>
         );
     }
@@ -59,20 +66,7 @@ export default class AutoCompleteText extends React.Component {
 
     }
 
-    handleKeyDown(e) {
-        console.log(e.keyCode);
-        const { cursor, suggestions } = this.state;
-        // arrow up/down button should select next/previous list element
-        if (e.keyCode === 38 && cursor > 0) {
-            this.setState(prevState => ({
-                cursor: prevState.cursor - 1,
-            }))
-        } else if (e.keyCode === 40 && cursor < suggestions.length - 1) {
-            this.setState(prevState => ({
-                cursor: prevState.cursor + 1,
-            }))
-        }
-    }
+
 
 
     // < div className="AutoCompleteText" >
@@ -80,7 +74,7 @@ export default class AutoCompleteText extends React.Component {
     handleSubmit = async () => {
 
         console.log(JSON.stringify(this.state))
-        let response = await fetch('/collect-all/', {
+        let response = await fetch('/collect-bolly/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -95,7 +89,9 @@ export default class AutoCompleteText extends React.Component {
             console.log(json["alltext"])
             this.items = json["alltext"]
 
-
+            this.setState(() => ({
+                rendered: 1
+            }))
 
 
         } else {
@@ -116,9 +112,20 @@ export default class AutoCompleteText extends React.Component {
         return (
             <div className="AutoCompleteText">
 
-                <input value={text} onChange={this.onTextChanged} onKeyDown={this.handleKeyDown} type="text" placeholder={ph} />
-                {this.renderSuggestions()}
 
+                {this.renderSuggestions()}
+                {this.state.rendered === 0 &&
+                    <Loader
+                        type="Ball-Triangle"
+                        color="#00BFFF"
+                        height={100}
+                        width={100}
+                    />
+                }
+                {this.state.rendered === 1 &&
+                    <input value={text} onChange={this.onTextChanged} onKeyDown={this.handleKeyDown} type="text" placeholder={ph} />
+
+                }
             </div >
         )
     }

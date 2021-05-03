@@ -24,7 +24,7 @@ class App extends Component {
 
 		this.myConfig = {
 			"automaticRearrangeAfterDropNode": true,
-			"collapsible": true,
+			"collapsible": false,
 			"directed": false,
 			"focusAnimationDuration": 0.75,
 			"focusZoom": 1,
@@ -94,7 +94,7 @@ class App extends Component {
 	}
 
 	handleSubmit = async () => {
-
+		console.log("submitting");
 		this.showpath = null;
 		this.pressedShortest = 1;
 		this.setState({
@@ -103,7 +103,7 @@ class App extends Component {
 			recos: null,
 		})
 		console.log(JSON.stringify(this.state))
-		let response = await fetch('/reactdata/', {
+		let response = await fetch('/bollymovies/', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json;charset=utf-8'
@@ -116,9 +116,9 @@ class App extends Component {
 		if (response.ok) { // if HTTP-status is 200-299
 			// get the response body (the method explained below)
 			let json = await response.json();
-			console.log(json["shortestpath"])
+			console.log(json["path"])
 			this.setState({
-				path: json["shortestpath"],
+				path: json["path"],
 				pressedRecos: 0,
 			})
 
@@ -151,15 +151,28 @@ class App extends Component {
 	render() {
 
 
-
+		const onDoubleClickNode = function (nodeId, node) {
+			// console.log(nodeId);
+			var tmp = nodeId.replace(" ", "_");
+			var link = "https://en.wikipedia.org/wiki/" + tmp;
+			openInNewTab(link);
+			// window.alert('Clicked node ${nodeId} in position (${node.x}, ${node.y})');
+		};
+		const openInNewTab = (url) => {
+			const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
+			if (newWindow) newWindow.opener = null
+		}
 		if (this.pressedShortest) {
 
 			this.data.nodes = [];
 			this.data.links = [];
 			for (const node in this.state.path) {
-				this.data.nodes.push({ id: `${this.state.path[node]}` });
+				this.data.nodes.push({
+					id: `${this.state.path[node][0]}`,
+					svg: "https://" + `${this.state.path[node][1]}`
+				});
 				if (node > 0) {
-					this.data.links.push({ source: `${this.state.path[node]}`, target: `${this.state.path[node - 1]}` });
+					this.data.links.push({ source: `${this.state.path[node][0]}`, target: `${this.state.path[node - 1][0]}` });
 				}
 			}
 			// <Shortestpath thepath={this.state.path} />
@@ -171,6 +184,7 @@ class App extends Component {
 								id="graph-id" // id is mandatory
 								data={this.data}
 								config={this.myConfig}
+								onDoubleClickNode={onDoubleClickNode}
 							/>
 						</div>
 					</div >

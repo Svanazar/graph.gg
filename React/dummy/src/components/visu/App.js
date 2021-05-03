@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
+import MaterialSwitch from '@material-ui/core/Switch';
+import Switchh from "react-switch";
 import './App.css';
 import AutoCompleteText from './Autocomplete';
 import Showrecos from './Showrecos';
 import { Graph } from "react-d3-graph";
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { svg } from 'd3-fetch';
+import Loader from "react-loader-spinner";
+
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 // graph payload (with minimalist structure)
 
 class App extends Component {
@@ -20,6 +26,9 @@ class App extends Component {
 			mutuals: null,
 			recos: null,
 			pressedRecos: 0,
+			checked: false,
+			node1: '',
+			node2: ''
 		};
 		this.data = {
 			nodes: [],
@@ -28,7 +37,7 @@ class App extends Component {
 
 		this.myConfig = {
 			"automaticRearrangeAfterDropNode": true,
-			"collapsible": true,
+			"collapsible": false,
 			"directed": false,
 			"focusAnimationDuration": 0.75,
 			"focusZoom": 1,
@@ -36,7 +45,7 @@ class App extends Component {
 			"height": 400,
 			"highlightDegree": 1,
 			"highlightOpacity": 1,
-			"linkHighlightBehavior": false,
+			"linkHighlightBehavior": true,
 			"maxZoom": 8,
 			"minZoom": 0.1,
 			"nodeHighlightBehavior": true,
@@ -96,10 +105,15 @@ class App extends Component {
 
 		this.pressedShortest = 0;
 		this.pressedMutuals = 0;
-	}
 
+		this.handleChange = this.handleChange.bind(this);
+	}
+	handleChange(checked) {
+		this.setState({ checked });
+	}
 	handleSubmit = async () => {
 
+		this.showpath3 = null;
 		this.showpath2 = null;
 		this.showpath = null;
 		this.pressedMutuals = 0;
@@ -138,6 +152,7 @@ class App extends Component {
 	}
 	handleSubmit2 = async () => {
 
+		this.showpath3 = null;
 		this.showpath2 = null;
 		this.showpath = null;
 		this.pressedMutuals = 1;
@@ -169,6 +184,30 @@ class App extends Component {
 		} else {
 			alert("HTTP-Error: " + response.status);
 		}
+
+		let response2 = await fetch('/nametolink/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json;charset=utf-8'
+			},
+			body: JSON.stringify(this.state),
+			credentials: 'include'
+			// mode: 'cors'
+		})
+		if (response2.ok) { // if HTTP-status is 200-299
+			// get the response2 body (the method explained below)
+			let json = await response2.json();
+			console.log(json["nodes"])
+
+			this.setState({
+				node1: json["nodes"][0],
+				node2: json["nodes"][1],
+			})
+
+		} else {
+			alert("HTTP-Error: " + response2.status);
+		}
+
 	}
 
 	handleSubmit3 = async () => {
@@ -214,8 +253,6 @@ class App extends Component {
 	}
 
 
-
-
 	changeName1 = (newName) => {
 		this.setState({
 			name1: newName
@@ -232,6 +269,17 @@ class App extends Component {
 
 	render() {
 
+		const onDoubleClickNode = function (nodeId, node) {
+			// console.log(nodeId);
+			var tmp = nodeId.replace(" ", "_");
+			var link = "https://en.wikipedia.org/wiki/" + tmp;
+			openInNewTab(link);
+			// window.alert('Clicked node ${nodeId} in position (${node.x}, ${node.y})');
+		};
+		const openInNewTab = (url) => {
+			const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
+			if (newWindow) newWindow.opener = null
+		}
 
 
 		if (this.pressedShortest && !this.mutuals) {
@@ -239,9 +287,14 @@ class App extends Component {
 			this.data.nodes = [];
 			this.data.links = [];
 			for (const node in this.state.path) {
-				this.data.nodes.push({ id: `${this.state.path[node]}` });
+				this.data.nodes.push({
+					id: `${this.state.path[node][0]}`,
+					svg: "https://" + `${this.state.path[node][1]}`,
+					size: 500,
+					fontSize: 18
+				});
 				if (node > 0) {
-					this.data.links.push({ source: `${this.state.path[node]}`, target: `${this.state.path[node - 1]}` });
+					this.data.links.push({ source: `${this.state.path[node][0]}`, target: `${this.state.path[node - 1][0]}` });
 				}
 			}
 			// <Shortestpath thepath={this.state.path} />
@@ -252,6 +305,7 @@ class App extends Component {
 							<Graph
 								id="graph-id" // id is mandatory
 								data={this.data}
+								onDoubleClickNode={onDoubleClickNode}
 								config={this.myConfig}
 							/>
 						</div>
@@ -262,20 +316,87 @@ class App extends Component {
 		}
 		if (!this.pressedShortest && this.pressedMutuals) {
 
+			if (this.state.name1 != '' && this.state.name2 != '') {
+
+
+				this.data.nodes = [];
+				this.data.links = [];
+				this.data.nodes.push({
+					id: `${this.state.name1}`,
+					svg: "https://" + this.state.node1
+				});
+				this.data.nodes.push({
+					id: `${this.state.name2}`,
+					svg: "https://" + this.state.node2
+				});
+
+				for (const node in this.state.mutuals) {
+					this.data.nodes.push({
+						id: `${this.state.mutuals[node][0]}`,
+						svg: "https://" + `${this.state.mutuals[node][1]}`
+					});
+					this.data.links.push({ source: `${this.state.mutuals[node][0]}`, target: `${this.state.name1}` });
+					this.data.links.push({ source: `${this.state.mutuals[node][0]}`, target: `${this.state.name2}` });
+
+				}
+
+				// <Shortestpath thepath={this.state.mutuals} />
+				this.showpath2 =
+					(
+						<div >
+							<div className="thegraph">
+								<Graph
+									id="graph-id" // id is mandatory
+									data={this.data}
+									config={this.myConfig}
+									onDoubleClickNode={onDoubleClickNode}
+								/>
+							</div>
+						</div >
+					)
+
+				this.showpath = null;
+			}
+			else {
+
+				this.showpath = null;
+				this.showpath2 = null;
+				this.showpath3 = null;
+				this.pressedMutuals = 0;
+				this.pressedShortest = 0;
+				window.alert("Please enter both names")
+			}
+		}
+
+		if (this.state.pressedRecos === 1) {
+
+			this.showpath = null;
+			this.showpath2 = null;
+			// console.log("lmao");
+			// console.log(this.state);
+			// this.showpath3 = (
+			// 	<div>
+			// 		<Showrecos thepath={this.state.recos} />
+			// 	</div>
+
+			// )
 			this.data.nodes = [];
 			this.data.links = [];
-			this.data.nodes.push({ id: `${this.state.name1}` });
-			this.data.nodes.push({ id: `${this.state.name2}` });
-
-			for (const node in this.state.mutuals) {
-				this.data.nodes.push({ id: `${this.state.mutuals[node]}` });
-				this.data.links.push({ source: `${this.state.mutuals[node]}`, target: `${this.state.name1}` });
-				this.data.links.push({ source: `${this.state.mutuals[node]}`, target: `${this.state.name2}` });
-
+			var ind = 0
+			const pos = [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2], [3, 1]]
+			// svg: "https://" + `${this.state.mutuals[node][1]}`
+			for (const node in this.state.recos) {
+				this.data.nodes.push({
+					id: `${this.state.recos[node][0]}`,
+					svg: "https://" + `${this.state.recos[node][1]}`,
+					size: 50 * `${this.state.recos[node][2]}`,
+					x: pos[ind][0] * 100,
+					y: pos[ind][1] * 100,
+				});
+				// console.log(pos[ind][0])
+				ind = ind + 1
 			}
-
-			// <Shortestpath thepath={this.state.mutuals} />
-			this.showpath2 =
+			this.showpath3 =
 				(
 					<div >
 						<div className="thegraph">
@@ -283,28 +404,14 @@ class App extends Component {
 								id="graph-id" // id is mandatory
 								data={this.data}
 								config={this.myConfig}
+								onDoubleClickNode={onDoubleClickNode}
 							/>
 						</div>
 					</div >
 				)
 
-			this.showpath = null;
-
-		}
-
-		if (this.state.pressedRecos === 1) {
-
-			this.showpath = null;
 			this.showpath2 = null;
-			console.log("lmao");
-			console.log(this.state);
-			this.showpath3 = (
-				<div>
-					<Showrecos thepath={this.state.recos} />
-				</div>
-
-			)
-
+			this.showpath = null;
 			// 		< div >
 
 			// 		<ul>
@@ -332,11 +439,32 @@ class App extends Component {
 								</div>
 							</div>
 						</div>
+
 						<div className="subb1">
 
 							<button type="submit" onClick={this.handleSubmit} class="btn btn-primary">Shortest Path</button>
 							<button type="submit" onClick={this.handleSubmit2} class="btn btn-primary">Mutual Friends</button>
 							<button type="submit" onClick={this.handleSubmit3} class="btn btn-primary">Friend Recommendations</button>
+							<div className="AliveSwitch">
+								<label htmlFor="material-switch">
+									<span>Include only Alive</span>
+									<Switchh
+										checked={this.state.checked}
+										onChange={this.handleChange}
+										onColor="#86d3ff"
+										onHandleColor="#00c853"
+										handleDiameter={30}
+										uncheckedIcon={false}
+										checkedIcon={false}
+										boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+										activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
+										height={20}
+										width={48}
+										className="react-switch"
+										id="material-switch"
+									/>
+								</label>
+							</div>
 						</div>
 
 						<div className="realstuff">
@@ -345,7 +473,7 @@ class App extends Component {
 							{this.showpath3}
 
 						</div>
-						
+
 					</div>
 				</Switch>
 			</main>
