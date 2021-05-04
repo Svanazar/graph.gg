@@ -1,0 +1,40 @@
+<nav class="navbar  is-fixed-top">
+					<div class="navbar-brand" >
+						<a class="navbar-item alpha" href="/">Home</a>
+					</div>
+					<div id="navbarExampleTransparentExample">
+						<div class="navbar-item alpha">
+							<a class="navbar-item" href="/visu">Visualise</a>
+						</div>
+					</div>
+					<div id="navbarExampleTransparentExample">
+						<div class="navbar-item alpha">
+							<a class="navbar-item" href="/poli">Politics</a>
+						</div>
+					</div>
+					<div id="navbarExampleTransparentExample">
+						<div class="navbar-item alpha">
+							<a class="navbar-item" href="/bolly">Bollywood</a>
+						</div>
+					</div>
+					<div class="navbar-end">
+						<div class="navbar-item">
+							<div class="field is-grouped">
+								<p class="control ">
+									<div className="navbut">
+
+										<a class="button is-link" href="/contact">
+											Contact Us
+									</a>
+									</div>
+								</p>
+								<p class="control">
+									<a class="button team" href="/team">
+										Team
+									</a>
+								</p>
+							</div>
+						</div>
+					</div>
+				</nav>
+

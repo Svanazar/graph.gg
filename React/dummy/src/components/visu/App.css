@@ -1,13 +1,15 @@
 .App {
   text-align: center;
-  margin-top: 4em;
+  /* margin-top: 4em; */
   max-height: 300px;
 }
 .AppComponent{
   margin : 150px auto 0 auto;
   width: 600px; 
 } 
-
+.jumbotron.gg{
+  padding-bottom: 1rem;
+}
 .subb1 button{ /* You Can Name it what you want*/
   /* background-color: red; */
   margin-right:16px;

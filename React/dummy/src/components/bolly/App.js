@@ -1,11 +1,33 @@
 import React, { Component } from 'react';
 import './App.css';
 import AutoCompleteText from './Autocomplete';
+import { AnimatePresence, motion } from 'framer-motion';
 import Showrecos from './Showrecos';
 import { Graph } from "react-d3-graph";
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 // graph payload (with minimalist structure)
-
+const pageVariants = {
+	initial: {
+		opacity: 0,
+		x: "-100vw",
+		scale: 0.8
+	},
+	in: {
+		opacity: 1,
+		x: 0,
+		scale: 1
+	},
+	out: {
+		opacity: 0,
+		x: "100vw",
+		scale: 1.2
+	}
+};
+const pageTransition = {
+	type: "tween",
+	ease: "anticipate",
+	duration: 0.5
+};
 class App extends Component {
 	constructor(props) {
 		super(props);
@@ -198,7 +220,7 @@ class App extends Component {
 		return (
 			<main>
 				<Switch>
-					<div className="App" >
+					<motion.div className="App" initial="initial" exit="out" animate="in" variants={pageVariants} transition={pageTransition} >
 						<div class="jumbotron">
 							<h1 class="display-3">Bollywood</h1>
 							<p class="lead">Enter any two names to see the shortest path between them</p>
@@ -225,7 +247,7 @@ class App extends Component {
 
 						{this.showpath}
 
-					</div>
+					</motion.div>
 				</Switch>
 			</main>
 		);

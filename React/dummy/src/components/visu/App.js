@@ -5,13 +5,35 @@ import './App.css';
 import AutoCompleteText from './Autocomplete';
 import Showrecos from './Showrecos';
 import { Graph } from "react-d3-graph";
+import { AnimatePresence, motion } from 'framer-motion';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { svg } from 'd3-fetch';
 import Loader from "react-loader-spinner";
 
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 // graph payload (with minimalist structure)
-
+const pageVariants = {
+	initial: {
+		opacity: 0,
+		x: "-100%",
+		scale: 0.8
+	},
+	in: {
+		opacity: 1,
+		x: 0,
+		scale: 1
+	},
+	out: {
+		opacity: 0,
+		x: "100%",
+		scale: 1.2
+	}
+};
+const pageTransition = {
+	type: "tween",
+	ease: "anticipate",
+	duration: 0.5
+};
 class App extends Component {
 	constructor(props) {
 		super(props);
@@ -424,8 +446,16 @@ class App extends Component {
 		return (
 			<main>
 				<Switch>
-					<div className="App" >
-
+					<motion.div className="App" initial="initial" exit="out" animate="in" variants={pageVariants} transition={pageTransition} >
+						<div class="jumbotron gg">
+							<h1 class="display-3">Visualise</h1>
+							<p class="lead">Enter any two names to see :</p>
+							<h6>The shortest path</h6>
+							<h6>Their mutual friends</h6>
+							<hr class="my-2" />
+							<p class="lead">Or enter a name to see :</p>
+							<h6>Friend Recommendations</h6>
+						</div>
 						<div className="AppComponent">
 
 							<div class="container">
@@ -474,7 +504,7 @@ class App extends Component {
 
 						</div>
 
-					</div>
+					</motion.div>
 				</Switch>
 			</main>
 		);

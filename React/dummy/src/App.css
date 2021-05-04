@@ -1,8 +1,13 @@
 .App {
   text-align: center;
-  max-height: 300px;
+  margin-top: 0em;
+  /* max-height: 300px; */
 }
 .AppComponent{
-  margin : 150px auto 0 auto;
+  margin : 0 auto 0 auto;
   width: 600px; 
 } 
+.navbar.navbar-expand.navbar-dark.bg-dark.fixed-top{
+  padding: .01rem 1rem;
+
+}

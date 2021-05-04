@@ -2,15 +2,26 @@
   /* background-color: red; */
 
   text-align: center;
-  max-height: 300px;
+  /* max-height: 300px; */
   margin-top : 0;
+  margin-bottom : 0;
 } 
+.hero-body.x{
+  width: 80%;
+  margin: 0 auto;
+  /* background-color: red; */
+}
+
+.hero-body.x button{
+  text-align: center;
+}
 .topNavbar{
   margin-top: 0;
+  margin-bottom: 0;
 }
 .AppComponent{
   margin : 0 auto 0 auto;
-  width: 600px; 
+  /* width: 600px;  */
 } 
 
 .subb1 button{ /* You Can Name it what you want*/

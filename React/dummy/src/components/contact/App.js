@@ -5,7 +5,30 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
 // import Navbar from 'react-bootstrap/Navbar'
 // graph payload (with minimalist structure)
+import { AnimatePresence, motion } from 'framer-motion';
 
+const pageVariants = {
+    initial: {
+        opacity: 0,
+        x: "-100%",
+        scale: 0.8
+    },
+    in: {
+        opacity: 1,
+        x: 0,
+        scale: 1
+    },
+    out: {
+        opacity: 0,
+        x: "100%",
+        scale: 1.2
+    }
+};
+const pageTransition = {
+    type: "tween",
+    ease: "anticipate",
+    duration: 0.5
+};
 class App extends Component {
     constructor(props) {
         super(props);
@@ -57,7 +80,7 @@ class App extends Component {
         return (
             <main>
                 <Switch>
-                    <div className="App" >
+                    <motion.div className="App" initial="initial" exit="out" animate="in" variants={pageVariants} transition={pageTransition} >
 
                         <div class="container">
                             <div class="section-title">
@@ -79,7 +102,7 @@ class App extends Component {
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form>
                         </div>
-                    </div>
+                    </motion.div>
                 </Switch>
             </main >
         );
