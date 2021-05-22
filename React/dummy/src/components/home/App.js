@@ -30,8 +30,9 @@ const pageTransition = {
 	ease: "anticipate",
 	duration: 0.5
 };
-class App extends Component {
 
+
+class App extends Component {
 
 
 
@@ -76,9 +77,12 @@ class App extends Component {
 								<div class="columns">
 
 									<div class="column">
+
 										<figure class="image is-4-3">
 											<img src={sampleimg} />
+
 										</figure>
+
 									</div>
 									<div class="column">
 										<h1 class="display-5 title has-text-white is-family-secondary">

@@ -52,15 +52,16 @@ class App extends Component {
 										<div class="team-img">
 											<img src={require("./img/aditya.jpg")} alt="Team Image" />
 											<div class="team-content">
-												<p>CEO of Frontend</p>
+												<p>Primarily worked on building React based Frontend and integrated the Django backend</p>
 											</div>
 										</div>
 										<div class="team-content">
 											<div class="team-social">
 
-												<a class="social-fb" href="https://www.facebook.com/aditya.trivedi.9028/"><i class="fab fa-facebook-f"></i></a>
-												<a class="social-li" href="https://www.linkedin.com/in/trivedi-aditya/"><i class="fab fa-linkedin-in"></i></a>
-												<a class="social-in" href="https://www.instagram.com/adityatrivediii/"><i class="fab fa-instagram"></i></a>
+												<a class="social-fb" href="https://www.facebook.com/aditya.trivedi.9028/" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+												<a class="social-li" href="https://www.linkedin.com/in/trivedi-aditya/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
+												<a class="social-in" href="https://www.instagram.com/adityatrivediii/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+												<a class="social-gi" href="https://github.com/ad1tyat" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
 
 											</div>
 										</div>
@@ -75,16 +76,16 @@ class App extends Component {
 										<div class="team-img">
 											<img src={require("./img/atharva.jpg")} alt="Team Image" />
 											<div class="team-content">
-												<p>CEO of Scraping</p>
+												<p>Worked on collection of data and built the Neo4J database</p>
 											</div>
 										</div>
 										<div class="team-content">
 											<div class="team-social">
 
-												<a class="social-fb" href="https://www.facebook.com/profile.php?id=100009062382260"><i class="fab fa-facebook-f"></i></a>
-												<a class="social-li" href="https://www.linkedin.com/in/atharva-varde-643a05197/"><i class="fab fa-linkedin-in"></i></a>
-												<a class="social-in" href="https://www.instagram.com/kinginthenorth_561/"><i class="fab fa-instagram"></i></a>
-
+												<a class="social-fb" href="https://www.facebook.com/profile.php?id=100009062382260" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+												<a class="social-li" href="https://www.linkedin.com/in/atharva-varde-643a05197/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
+												<a class="social-in" href="https://www.instagram.com/kinginthenorth_561/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+												<a class="social-gi" href="https://github.com/varde2407" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
 											</div>
 										</div>
 									</div>
@@ -98,16 +99,16 @@ class App extends Component {
 										<div class="team-img">
 											<img src={require("./img/shash.png")} alt="Team Image" />
 											<div class="team-content">
-												<p>CEO of Backend</p>
+												<p>Optimised the scraping and worked on Django-Neo4J integration</p>
 											</div>
 										</div>
 										<div class="team-content">
 											<div class="team-social">
 
-												<a class="social-fb" href="https://www.facebook.com/shashwat.sharma.5209"><i class="fab fa-facebook-f"></i></a>
-												<a class="social-li" href=""><i class="fab fa-linkedin-in"></i></a>
-												<a class="social-in" href="https://www.instagram.com/watshashwat/"><i class="fab fa-instagram"></i></a>
-
+												<a class="social-fb" href="https://www.facebook.com/shashwat.sharma.5209" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+												<a class="social-li" href="" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
+												<a class="social-in" href="https://www.instagram.com/watshashwat/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+												<a class="social-gi" href="https://github.com/Svanazar" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
 											</div>
 										</div>
 									</div>
