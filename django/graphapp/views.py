@@ -15,7 +15,7 @@ from neomodel import (
 from neomodel import db
 from django.http import JsonResponse
 
-URL_NEO4J = "bolt://neo4j:password@localhost:7687"
+URL_NEO4J = "bolt://neo4j:lekhchitra@34.207.182.136:7687"
 
 
 class Person(StructuredNode):
