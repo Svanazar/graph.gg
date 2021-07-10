@@ -28,7 +28,7 @@ class Person(StructuredNode):
 
 # Create your views here.
 def index(request):
-    return render(request, "graphapp/index.html")
+    return render(request, "index.html")
 
 
 @csrf_exempt

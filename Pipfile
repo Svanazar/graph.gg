@@ -29,6 +29,9 @@ Shapely = "==1.7.1"
 aiohttp = "*"
 aiodns = "*"
 python-dotenv = "*"
+gunicorn = "*"
+whitenoise = "*"
+django-heroku = "*"
 
 [dev-packages]
 

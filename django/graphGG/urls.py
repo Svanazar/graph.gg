@@ -21,7 +21,7 @@ from django.conf.urls import url
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    url(r"^$", views.index, name="index"),
     url(r"^see_nodes/", views.see_nodes, name="see_nodes"),
     url(r"^", include("graphapp.urls")),
+    url(r"^", views.index, name="index"),
 ]
