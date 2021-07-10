@@ -8,7 +8,10 @@ class Person(StructuredNode):
     politician = BooleanProperty()
     cricketer = BooleanProperty()
     bollywood = BooleanProperty()
-    
+    alive = BooleanProperty()
+    pageLink = StringProperty()
+    imgLink = StringProperty()
+    indian = BooleanProperty()
 
 class Team(StructuredNode):
     name = StringProperty(unique_index=True)

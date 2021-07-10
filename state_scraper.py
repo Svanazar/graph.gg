@@ -12,9 +12,11 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from neomodel import config
 
-config.DATABASE_URL = "bolt://neo4j:pass@localhost:7687"
 
-from graph_models import Person
+
+from graph_models import Person, State
+
+config.DATABASE_URL = "bolt://neo4j:second@localhost:7687"
 
 # stores occupation and corresponding keywords
 occupation_filters = {
@@ -24,7 +26,7 @@ occupation_filters = {
 
 states_dict = {
 "Maharashtra", "Uttar Pradesh", "Rajasthan", "Gujarat", "Madhya Pradesh", "Bihar", "Delhi", "Andhra Pradesh", "Tamil Nadu", "Kerala", "Karnataka",
-"West Bengal", "Assam", "Punjab"
+"West Bengal", "Assam", "Punjab", "Jharkhand"
 }
 
 
@@ -138,7 +140,8 @@ async def main():
         source = q.get()
         tqdm.write(f'\nSOURCE: {source}')
         additionSourceCount += 1
-        curr = State(name=source).save()
+        # curr = State(name=source).save()
+        curr = State.nodes.get_or_none(name=source)
         
         URL = "https://en.wikipedia.org/wiki/List_of_people_from_" + source.replace(" ", "_")
         content = ""

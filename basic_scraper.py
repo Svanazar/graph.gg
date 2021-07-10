@@ -14,7 +14,7 @@ from neomodel import config
 
 from graph_models import Person
 
-config.DATABASE_URL = "bolt://neo4j:lekhchitra@localhost:7687"
+config.DATABASE_URL = "bolt://neo4j:second@localhost:7687"
 
 # stores occupation and corresponding keywords
 occupation_filters = {
@@ -23,8 +23,15 @@ occupation_filters = {
     "bollywood":["actor","actress","director","singer","producer"],
 }
 
-MAX_ADDITION_SOURCES = 5
+MAX_ADDITION_SOURCES = 20
 additionSourceCount = 0
+SOURCES_POLITICS = ["Narendra Modi", "Rahul Gandhi", "Atal Bihari Vajpayee", "Indira Gandhi", "Mamata Banerjee", "Lalu Prasad Yadav", "N. Chandrababu Naidu", "J. Jayalalithaa", "Arvind Kejriwal", "Sharad Pawar", "Bal Thackeray", "Arun Jaitley"]
+
+SOURCES_ACTORS = ["Shah Rukh Khan", "Amitabh Bachchan", "Aamir Khan", "Sanjay Dutt", "Rajnikanth", "Dharmendra", "Anushka Sharma", "Deepika Padukone", "Kangana Ranaut", "Alia Bhatt", "Naseeruddin Shah", "Kamal Hassan", "Saif Ali Khan", "Rishi Kapoor", "Hema Malini", "Jaya Bachchan", "Ritiesh Deshmukh"]
+
+SOURCES_CRICKETERS = ["Sachin Tendulkar", "MS Dhoni", "Sourav Ganguly", "Virat Kohli", "Yuvraj Singh", "Gautam Gambhir", "Navjot Singh Sidhu", "Ravi Shastri", "Mohammad Azharuddin", "Rahul Dravid", "Anil Kumble", "Rohit Sharma"]
+
+SOURCES_CRICKETERS = ["Mohammad Azharuddin", "Harbhajan Singh", "Hardik Pandya", "Rishabh Pant", "Jasprit Bumrah", "Kedar Jadhav", "Sanju Samson", "Mohammad Kaif", "Ajit Agarkar", "Sanjay Manjrekar"]
 
 async def scrape(link, curr, iterred):
     '''
@@ -72,6 +79,7 @@ async def scrape(link, curr, iterred):
     soup2 = BeautifulSoup(cont, "html.parser")
 
     #Born check
+    isAlive = True
     dict2 = soup2.find_all("table", class_="infobox")
     if len(dict2) == 0:
         return None
@@ -79,6 +87,9 @@ async def scrape(link, curr, iterred):
     index = s.find("Born")
     if index < 0:
         return None
+    index2 = s.find("Died")
+    if index2 > 0:
+        isAlive = False
     tqdm.write(f'\n{person_name}')
 
     #Text length check
@@ -88,7 +99,7 @@ async def scrape(link, curr, iterred):
         ss = para.get_text()
         sss = ss.split(" ")
         c += len(sss)
-    if c < 1700:
+    if c < 1500:
         return None
     tqdm.write(f'Text length is {c}')
 
@@ -99,14 +110,25 @@ async def scrape(link, curr, iterred):
             break
 
     line = first_para.split('\n')[0]
+    now = Person(name=link.get("title"))
+    #Get Image link
+    imagebox = soup2.select_one(".infobox-image")
+    if imagebox is not None:
+        src = imagebox.find("img")['src']
+        setattr(now, "imgLink", src[2:])
+    setattr(now, "alive", isAlive)
+    setattr(now, "pageLink", url2)
 
-    #Indian check
+    # Check Indian
+    isIndian = False
     index1=line.find("Indian")
-    if index1 < 0 :
-        tqdm.write("NOT INDIAN")
+    if index1 > 0 :
+        isIndian = True
+    setattr(now, "indian", isIndian)
+
+    if not isIndian:
         return None
 
-    now = Person(name=link.get("title"))
     
     # Adding occupation information
     for occupation, keywords in occupation_filters.items():
@@ -122,13 +144,15 @@ async def scrape(link, curr, iterred):
     tqdm.write(f'SAVED {person_name}')
     curr.friends.connect(now)
 
+    #Indian check
+
     return person_name
 
 async def main():
     global session, additionSourceCount
     session = aiohttp.ClientSession()
-    source = "Shah Rukh Khan"
-    q.put(source)
+    for source in SOURCES_CRICKETERS:
+        q.put(source)
     
     # Initialising progressbar
     pbar = tqdm(total=1)

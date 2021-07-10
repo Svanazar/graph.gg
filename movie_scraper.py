@@ -14,7 +14,7 @@ from neomodel import config
 
 from graph_models import Person, Movie
 
-config.DATABASE_URL = "bolt://neo4j:lekhchitra@localhost:7687"
+config.DATABASE_URL = "bolt://neo4j:second@localhost:7687"
 
 # stores occupation and corresponding keywords
 occupation_filters = {
@@ -100,10 +100,10 @@ async def main():
     
     dic={"2000", "2001", "2004", "2005", "2008","2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2019", "2020" }
 
-    #dic = {"2002", "2003", "2007", "2018", "2006"}
+    dict = ["2006"]
 
     
-    for num in dic:
+    for num in dict:
         q.put(num)
     
 
