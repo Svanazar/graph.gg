@@ -12,8 +12,9 @@ A graph network of Indian celebrities built by scraping Wikipedia and other webs
 # Functionalities
 
 ## Scraping and Building the Database:
-The database of the project was populated by extensively scraping the respective person's Wikipedia page. Additional information, like the person's political affiliations were scraped from websites like 
-The graph database is in the form of several nodes(vertices) interconnected by edges.
+The database of the project was populated by extensively scraping the respective person's Wikipedia page. Additional information, like the person's political affiliations were scraped from websites like https://www.myneta.info/ .
+- The database has been built in a BFS fashion. The program iterates through the Wikipedia page of the starting node (person) and adds other people mentioned there into a priority queue (based on the "importance" of these people). Links are added between these people and the original node. The original node is then popped from the queue, and this same process takes place for the next node in the queue.
+- The graph database is in the form of several nodes(vertices) interconnected by edges.
 There are three types of nodes in the database:
 - Person
 - State (eg. Maharashtra, Delhi, etc). Persons are linked to the states they are associated with using edges.
