@@ -87,10 +87,10 @@ class App extends Component {
 									<div class="column">
 										<h1 class="display-5 title has-text-white is-family-secondary">
 											Wonder how Kangana Ranaut knows Babar ?
-											Here lies the answer !
-											Lorem ipsum
-											Lorem ipsum
-											Lorem ipsum
+											Here lies the answer :)
+											Click the button and discovering 
+											surprising connections
+											you never knew existed !
 										</h1>
 									</div>
 									<div class="column">
