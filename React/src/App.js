@@ -24,7 +24,7 @@ class App extends Component {
 					<Navbar.Brand href="/">Home</Navbar.Brand>
 					<Nav className="mr-auto">
 						<Nav.Link href="/visu">Visualise</Nav.Link>
-// 						<Nav.Link href="/poli">Politics</Nav.Link>
+						{/* <Nav.Link href="/poli">Politics</Nav.Link> */}
 						<Nav.Link href="/bolly">Bollywood</Nav.Link>
 					</Nav>
 					<Nav>
